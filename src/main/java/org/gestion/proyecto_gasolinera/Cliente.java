@@ -2,8 +2,6 @@ package org.gestion.proyecto_gasolinera;
 
 import jakarta.persistence.*;
 
-import javax.annotation.processing.Generated;
-
 @Entity
 @Table(name="client")
 public class Cliente {
@@ -17,8 +15,10 @@ public class Cliente {
     private String nif;
     private String creationDate;
     private String active;
-    private int gasStationId;
-    private int isAdmin;
+    @ManyToOne
+    @JoinColumn(name = "gasStationId")
+    private Gasolinera gasStation;
+    private boolean isAdmin;
 
     public int getClientId() {
         return clientId;
@@ -84,19 +84,15 @@ public class Cliente {
         this.active = active;
     }
 
-    public int getGasStationId() {
-        return gasStationId;
-    }
+    public Gasolinera getGasStation() { return gasStation;}
 
-    public void setGasStationId(int gasStationId) {
-        this.gasStationId = gasStationId;
-    }
+    public void setGasStation (Gasolinera gasStation){ this.gasStation = gasStation;}
 
-    public int getIsAdmin() {
+    public boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(int isAdmin) {
+    public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 }

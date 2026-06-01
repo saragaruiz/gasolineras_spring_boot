@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
     <title>Iniciar Sesión</title>
 </head>
-<body>
+<body class="log">
+<div class="inicio">
+    <h2>INICIAR SESIÓN</h2>
 <form action="/clientes/login-web" method="post">
     <label>Usuario: </label>
     <input type="text" name="username"/>
@@ -14,6 +17,6 @@
     <br><br>
     <button type="submit">Iniciar Sesión</button>
 </form>
-
+</div>
 </body>
 </html>

@@ -1,0 +1,17 @@
+body{
+    background-color: rgb(37 0 170 / 0.15);
+    font-family: Arial, Helvetica, sans-serif;
+}
+nav{
+    background-color: #D1B8FF;
+}
+ul{
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+}
+li{
+    padding:15px ;
+}

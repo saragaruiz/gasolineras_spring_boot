@@ -3,20 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>Clientes</title>
+    <link rel="stylesheet" th:href="@{/css/cliente.css}">
+
 </head>
-<body>
-<h1 text align="center">LISTADO DE CLIENTES</h1>
+<body class="container">
+
+<nav>
+    <ul>
+        <li><a href="/clientes/web">Clientes </a></li>
+        <li><a href="/provincias/web">Provincias </a></li>
+        <li><a href="/gasolineras/web">Gasolineras</a></li>
+    </ul>
+</nav>
+<a href="/clientes/nuevo">
+<button type="submit">Crear cliente</button>
+</a>
+<br><br>
+<button type="submit">Asignar Gasolinera</button>
+<button type="submit">Quitar Gasolinera</button>
+<button type="submit">Asignar Admin</button>
+
+<div class="contenido">
+    <h1 text align="center">LISTADO DE CLIENTES</h1>
+<input align="center" type="text" placeholder="Buscar...">
+<br><br>
 <table border="1" align="center">
+    <thead>
     <tr>
         <th>ID CLIENTE</th>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Usuario</th>
-        <th>Admin</th>
+        <th>DNI</th>
         <th>Activo</th>
         <th>Gasolinera Asociada</th>
+        <th>Rol</th>
+        <th>Opciones</th>
     </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${clientes}">
+        <td th:text="${c.clientId}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.surname}"></td>
+        <td th:text="${c.username}"></td>
+        <td th:text="${c.nif}"></td>
+        <td th:text="${c.active}"></td>
+        <td th:text="${c.gasStation != null ? c.gasStation.name : 'Sin asignar'}"></td>
+        <td th:text="${c.isAdmin ? 'ADMIN' : 'CLIENTE'}"
+        <td><a th:href="@{'/clientes/eliminar/' + ${c.clientId}}">
+            <button>Eliminar</button>
+        </a></td>
+    </tr>
+    </tbody>
 
 </table>
+</div>
 </body>
 </html>

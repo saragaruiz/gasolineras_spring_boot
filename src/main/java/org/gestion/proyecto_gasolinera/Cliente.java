@@ -1,5 +1,6 @@
 package org.gestion.proyecto_gasolinera;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,11 +11,14 @@ public class Cliente {
     private int clientId;
     private String name;
     private String surname;
+    @Column(unique = true, nullable = false)
     private String username;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String pass;
+    @Column(unique = true, nullable = false)
     private String nif;
     private String creationDate;
-    private String active;
+    private boolean active;
     @ManyToOne
     @JoinColumn(name = "gasStationId")
     private Gasolinera gasStation;
@@ -76,11 +80,11 @@ public class Cliente {
         this.creationDate = creationDate;
     }
 
-    public String getActive() {
+    public boolean getActive() {
         return active;
     }
 
-    public void setActive(String active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
@@ -88,7 +92,7 @@ public class Cliente {
 
     public void setGasStation (Gasolinera gasStation){ this.gasStation = gasStation;}
 
-    public boolean getIsAdmin() {
+    public boolean isAdmin() {
         return isAdmin;
     }
 

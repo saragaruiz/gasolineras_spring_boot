@@ -6,22 +6,29 @@ import org.gestion.proyecto_gasolinera.Registros;
 import org.gestion.proyecto_gasolinera.repositories.ClienteRepository;
 import org.gestion.proyecto_gasolinera.repositories.GasolineraRepository;
 import org.gestion.proyecto_gasolinera.repositories.RegistrosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class ClienteService {
-    @Autowired
-    ClienteRepository clienteRepository;
-    @Autowired
-    GasolineraRepository gasolineraRepository;
-    @Autowired
-    RegistrosRepository registrosRepository;
+    private final ClienteRepository clienteRepository;
+    private final GasolineraRepository gasolineraRepository;
+    private final RegistrosRepository registrosRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public ClienteService(ClienteRepository clienteRepository, GasolineraRepository gasolineraRepository, RegistrosRepository registrosRepository, PasswordEncoder passwordEncoder){
+        this.clienteRepository = clienteRepository;
+        this.gasolineraRepository = gasolineraRepository;
+        this.registrosRepository = registrosRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     //Guardar cliente
     public Cliente guardarCliente(Cliente cliente){
+        cliente.setPass(passwordEncoder.encode(cliente.getPass()));
+        cliente.setActive(true);
         return clienteRepository.save(cliente);
     }
     //ver clientes
@@ -42,7 +49,7 @@ public class ClienteService {
     //asociar gasolinera
     public Cliente asociarGasolinera(int clientId, int gasStationId) {
         Cliente cliente = clienteRepository.findById(clientId).orElseThrow();
-        Gasolinera gasolinera = gasolineraRepository.findById(gasStationId).orElseThrow();
+        Gasolinera gasolinera = gasolineraRepository.findById(gasStationId).orElseThrow(()-> new RuntimeException("Gasolinera no encontrada"));
 
         cliente.setGasStation(gasolinera);
         Cliente clienteActualizado = clienteRepository.save(cliente);
@@ -75,7 +82,10 @@ public class ClienteService {
         if(cliente == null){
             return null;
         }
-        if(cliente.getPass().equals(pass)){
+        if(cliente.getPass() == null) {
+            return null;
+        }
+        if(passwordEncoder.matches(pass, cliente.getPass())){
             return cliente;
         }
         return null;
@@ -83,19 +93,19 @@ public class ClienteService {
     //Dar baja
     public Cliente darBaja(String username){
         Cliente cliente = clienteRepository.findByUsername(username);
-        cliente.setActive("0");
+        cliente.setActive(false);
         return clienteRepository.save(cliente);
     }
     //dar alta
     public Cliente darAlta(String username){
         Cliente cliente = clienteRepository.findByUsername(username);
-        cliente.setActive("1");
+        cliente.setActive(true);
         return clienteRepository.save(cliente);
     }
     //cambiar contraseña
     public Cliente cambiarContraseña(String username, String nuevaPass){
         Cliente cliente = clienteRepository.findByUsername(username);
-        cliente.setPass(nuevaPass);
+        cliente.setPass(passwordEncoder.encode(nuevaPass));
         return clienteRepository.save(cliente);
     }
     //asignar admin

@@ -14,5 +14,4 @@ public class ProyectoGasolineraApplication {
         SpringApplication.run(ProyectoGasolineraApplication.class, args);
 
     }
-
 }

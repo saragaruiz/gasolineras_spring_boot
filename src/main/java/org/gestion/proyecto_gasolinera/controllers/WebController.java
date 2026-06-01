@@ -1,5 +1,6 @@
 package org.gestion.proyecto_gasolinera.controllers;
 
+import org.gestion.proyecto_gasolinera.repositories.ClienteRepository;
 import org.springframework.ui.Model;
 import org.gestion.proyecto_gasolinera.Cliente;
 import org.gestion.proyecto_gasolinera.service.ClienteService;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class WebController {
     private final ClienteService clienteService;
+    private final ClienteRepository clienteRepository;
 
-    public WebController(ClienteService clienteService) {
+    public WebController(ClienteService clienteService,  ClienteRepository clienteRepository) {
         this.clienteService = clienteService;
+        this.clienteRepository = clienteRepository;
     }
 
     @GetMapping("/login")
@@ -34,10 +37,12 @@ public class WebController {
             return "login";
     }
 
-
     @GetMapping("/clientes/web")
-    public String clientesWeb(Model model){
+    public String listar(@RequestParam(required = false) Long editingId, Model model) {
+
         model.addAttribute("clientes", clienteService.verClientes());
+        model.addAttribute("editingId", editingId);
+
         return "clientes";
     }
     @GetMapping("/clientes/nuevo")
@@ -63,6 +68,24 @@ public class WebController {
     @GetMapping("/clientes/admin/{id}")
     public String asignarAdmin(@PathVariable int id){
         clienteService.asignarAdmin(id);
+        return "redirect:/clientes/web";
+    }
+   /* @GetMapping("/clientes/admin/{id}")
+    public String quitarAdmin(@PathVariable int id){
+        clienteService.quitarAdmin(id);
+        return "redirect:/clientes/web";
+    }*/
+
+    @GetMapping("/clientes/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        model.addAttribute("clientes", clienteService.verClientes());
+        model.addAttribute("editingId", id);
+        return "clientes";
+    }
+
+    @PostMapping("/clientes/guardar")
+    public String guardar(@RequestParam int id, @RequestParam String name, @RequestParam String surname,  @RequestParam String username, @RequestParam String nif) {
+        clienteService.actualizarDatos(id, name, surname, username, nif);
         return "redirect:/clientes/web";
     }
 }

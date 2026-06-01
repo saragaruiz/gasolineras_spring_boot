@@ -41,19 +41,75 @@
         <th>Opciones</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="c : ${clientes}">
-        <td th:text="${c.clientId}"></td>
-        <td th:text="${c.name}"></td>
-        <td th:text="${c.surname}"></td>
-        <td th:text="${c.username}"></td>
-        <td th:text="${c.nif}"></td>
-        <td th:text="${c.active}"></td>
+        <form th:action="@{/clientes/guardar}" method="post">
+
+        <td>
+            <input type="hidden" name="id" th:value="${c.clientId}" />
+            <span th:text="${c.clientId}"></span>
+        </td>
+        <td>
+        <span th:if="${editingId != c.clientId}"
+              th:text="${c.name}"></span>
+
+        <input th:if="${editingId == c.clientId}"
+               type="text"
+               name="name"
+               th:value="${c.name}" />
+        </td>
+
+        <td>
+            <span th:if="${editingId != c.clientId}" th:text="${c.surname}"></span>
+            <input th:if="${editingId == c.clientId}"
+                   type="text"
+                   name="surname"
+                   th:value="${c.surname}" />
+        </td>
+
+        <td>
+            <span th:if="${editingId != c.clientId}" th:text="${c.username}"></span>
+            <input th:if="${editingId == c.clientId}"
+                   type="text"
+                   name="username"
+                   th:value="${c.username}" />
+        </td>
+
+            <td>
+                <span th:if="${editingId != c.clientId}" th:text="${c.nif}"></span>
+                <input th:if="${editingId == c.clientId}"
+                       type="text"
+                       name="nif"
+                       th:value="${c.nif}" />
+            </td>
+
+            <td>
+                <span th:if="${editingId != c.clientId}" th:text="${c.active}"></span>
+                <input th:if="${editingId == c.clientId}"
+                   type="text"
+                   name="active"
+                   th:value="${c.active}" />
+        </td>
+
         <td th:text="${c.gasStation != null ? c.gasStation.name : 'Sin asignar'}"></td>
-        <td th:text="${c.isAdmin ? 'ADMIN' : 'CLIENTE'}"
-        <td><a th:href="@{'/clientes/eliminar/' + ${c.clientId}}">
-            <button>Eliminar</button>
-        </a></td>
+        <td th:text="${c.isAdmin ? 'ADMIN' : 'CLIENTE'}"></td>
+
+            <!--OPCIONES -->
+        <td>
+            <a th:if="${editingId != c.clientId}"
+               th:href="@{/clientes/web(editingId=${c.clientId})}">
+                Editar
+            </a>
+            <a th:href="@{'/clientes/admin/' + ${c.clientId}}">
+                Admin
+            </a>
+                <input type="hidden" name="id" th:value="${c.clientId}">
+                <button type="submit" th:if="${editingId == c.clientId}">Guardar</button>
+            <input type="hidden" name="id" th:value="${c.clientId}">
+            <button type="submit" th:if="${editingId == c.clientId}">Cancelar</button>
+        </form>
+        </td>
     </tr>
     </tbody>
 

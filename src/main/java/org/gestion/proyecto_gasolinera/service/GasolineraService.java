@@ -9,20 +9,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public class GasolineraService {
-    @Autowired
     GasolineraRepository gasolineraRepository;
-
-    //guardar gasolinera
-    public Gasolinera guardarGasolinera(Gasolinera gasolinera){
-        return gasolineraRepository.save(gasolinera);
+    public GasolineraService(GasolineraRepository gasolineraRepository){
+        this.gasolineraRepository = gasolineraRepository;
     }
-    public List<Gasolinera> verGasolineras(){return gasolineraRepository.findAll();}
 
-    public Gasolinera actualizarGasolinera(Gasolinera gasolinera){
-        return gasolineraRepository.save(gasolinera);
+    public List<Gasolinera> verGasolineras(){
+        return gasolineraRepository.findAll();
+    }
+
+    public Gasolinera findById(int id) {
+        return gasolineraRepository.findById(id).orElse(null);
+    }
+
+    public Gasolinera guardarGasolinera(Gasolinera g){
+        return gasolineraRepository.save(g);
     }
 
     public void borrarGasolinera(int id){
+
         gasolineraRepository.deleteById(id);
     }
     public List<GasolineraProvinciaDTO> buscarPorProvincia(String provincia){

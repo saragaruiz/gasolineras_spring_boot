@@ -16,11 +16,6 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "FUNCIONA";
-    }
-
     @GetMapping
     public ResponseEntity<List<Cliente>> index() {
         return ResponseEntity.ok(clienteService.verClientes());

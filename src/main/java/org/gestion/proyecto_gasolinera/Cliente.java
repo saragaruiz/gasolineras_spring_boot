@@ -80,7 +80,7 @@ public class Cliente {
         this.creationDate = creationDate;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 

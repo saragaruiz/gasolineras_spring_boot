@@ -60,19 +60,9 @@ public class ClienteService {
     }
 
     //asociar gasolinera
-    public Cliente asociarGasolinera(int clientId, int gasStationId) {
-        Cliente cliente = clienteRepository.findById(clientId).orElseThrow();
-        Gasolinera gasolinera = gasolineraRepository.findById(gasStationId).orElseThrow(() -> new RuntimeException("Gasolinera no encontrada"));
-
-        cliente.setGasStation(gasolinera);
-        Cliente clienteActualizado = clienteRepository.save(cliente);
-        Registros registros = new Registros();
-        registros.setCliente(cliente);
-        registros.setGasolinera(gasolinera);
-        registros.setCreationDate(LocalDate.now());
-        registros.setTipo("Asociado");
-        registrosRepository.save(registros);
-        return clienteActualizado;
+    public Cliente findById(int id) {
+        return clienteRepository.findById(id)
+                .orElse(null);
     }
 
     //quitar asociacion
@@ -133,9 +123,9 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    /*public Cliente quitarAdmin(int clientId) {
+    public Cliente quitarAdmin(int clientId) {
         Cliente cliente = clienteRepository.findById(clientId).orElseThrow();
         cliente.setIsAdmin(false);
         return clienteRepository.save(cliente);
-    }*/
+    }
 }

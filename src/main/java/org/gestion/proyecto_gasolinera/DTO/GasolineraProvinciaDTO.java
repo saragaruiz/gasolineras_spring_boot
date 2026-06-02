@@ -1,7 +1,5 @@
 package org.gestion.proyecto_gasolinera.DTO;
 
-import org.gestion.proyecto_gasolinera.repositories.GasolineraRepository;
-
 public class GasolineraProvinciaDTO {
     private int gasStationId;
     private String name;

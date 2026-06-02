@@ -22,4 +22,8 @@ public class ProvinciaService {
             provinciaRepository.deleteById(id);
         }
     }
+    public Provincia findById(int id) {
+        return provinciaRepository.findById(id)
+                .orElse(null);
+    }
 }

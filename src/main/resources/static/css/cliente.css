@@ -57,7 +57,7 @@ table {
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 tbody tr:hover {
-    background: #fdf0ff;
+    background: #7f78ec;
 }
 td button {
     background: #a483f8;
@@ -66,5 +66,39 @@ td button {
 }
 
 td button:hover {
-    background: #8f73f3;
+    background: #4336fd;
+}
+.acciones{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+.acciones normal, .acciones edicion{
+    display: flex;
+    flex-wrap: wrap;
+    gap:6px;
+}
+.editar{
+    text-decoration: none;
+    background: #ff7100;
+    color:white;
+    border-radius: 5px;
+}
+.borrar{
+    text-decoration: none;
+    background: #ff3b28;
+    color:white;
+    border-radius: 5px;
+}
+.noAdmin{
+    text-decoration: none;
+    background: #1d5bfa;
+    color:white;
+    border-radius: 5px;
+}
+.admin{
+    text-decoration: none;
+    background:#E2581D;
+    color:white;
+    border-radius: 5px;
 }

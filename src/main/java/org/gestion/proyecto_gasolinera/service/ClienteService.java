@@ -29,7 +29,6 @@ public class ClienteService {
     //Guardar cliente
     public Cliente guardarCliente(Cliente cliente) {
         cliente.setPass(passwordEncoder.encode(cliente.getPass()));
-        cliente.setActive(true);
         return clienteRepository.save(cliente);
     }
 
@@ -86,6 +85,7 @@ public class ClienteService {
         if (cliente == null) {
             return null;
         }
+
         if (cliente.getPass() == null) {
             return null;
         }
@@ -112,6 +112,9 @@ public class ClienteService {
     //cambiar contraseña
     public Cliente cambiarContraseña(String username, String nuevaPass) {
         Cliente cliente = clienteRepository.findByUsername(username);
+        if(cliente == null){
+            throw new RuntimeException("Usuario no encontrado");
+        }
         cliente.setPass(passwordEncoder.encode(nuevaPass));
         return clienteRepository.save(cliente);
     }

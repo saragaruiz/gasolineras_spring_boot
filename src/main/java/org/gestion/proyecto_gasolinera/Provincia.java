@@ -6,6 +6,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import org.springframework.cglib.core.Local;
 
+import java.sql.PreparedStatement;
 import java.time.LocalDate;
 
 @Entity

@@ -33,6 +33,8 @@ public class WebController {
     public String loginWeb(@RequestParam String username,
                            @RequestParam String pass,
                            Model model) {
+        System.out.println("Usuario: " + username);
+
         Cliente cliente = clienteService.login(username, pass);
         if(cliente != null){
             model.addAttribute("cliente", cliente);
@@ -55,6 +57,7 @@ public class WebController {
     public String nuevoCliente(){
         return "nuevoCliente";
     }
+
     @PostMapping("/clientes/guardar-web")
     public String guardarCliente(@RequestParam String name, @RequestParam String surname, @RequestParam String username, @RequestParam String nif, @RequestParam String pass){
         Cliente cliente = new Cliente();
@@ -63,7 +66,7 @@ public class WebController {
         cliente.setUsername(username);
         cliente.setNif(nif);
         cliente.setPass(pass);
-        clienteService.guardarCliente(cliente);
+        clienteService.actualizarCliente(cliente);
         return "redirect:/clientes/web";
     }
     @GetMapping("/clientes/eliminar/{id}")
@@ -90,13 +93,13 @@ public class WebController {
     }
 
     @PostMapping("/clientes/guardar")
-    public String guardar(@RequestParam int id, @RequestParam String name, @RequestParam String surname,  @RequestParam String username, @RequestParam String nif, @RequestParam boolean active, @RequestParam(required = false)Integer gasStationId){
+    public String guardar(@RequestParam int id, @RequestParam String name, @RequestParam String surname,  @RequestParam String username, @RequestParam String nif, @RequestParam String active, @RequestParam(required = false)Integer gasStationId){
         Cliente cliente = clienteService.findById(id);
         cliente.setName(name);
         cliente.setSurname(surname);
         cliente.setUsername(username);
         cliente.setNif(nif);
-        cliente.setActive(active);
+        cliente.setActive(Boolean.parseBoolean(active));
         if (gasStationId != null) {
             Gasolinera g = gasolineraService.findById(gasStationId);
             cliente.setGasStation(g);
@@ -118,4 +121,24 @@ public class WebController {
         clienteService.guardarCliente(c);
         return "redirect:/clientes/web";
     }
+    @GetMapping("/clientes/cambiar-password")
+    public String cambiarPassword(){
+        return "CambiarContrasenia";
+    }
+    @PostMapping("/clientes/cambiar-password")
+    public String cambiarPassword(@RequestParam String username,
+                                  @RequestParam String nuevaPass) {
+
+        clienteService.cambiarContraseña(username, nuevaPass);
+
+        return "redirect:/clientes/web";
+    }
+    @GetMapping("/clientes/baja/{id}")
+    public String darBaja(@PathVariable int id) {
+        Cliente cliente = clienteService.findById(id);
+        cliente.setActive(false);
+        clienteService.actualizarCliente(cliente);
+        return "redirect:/clientes/web";
+    }
 }
+

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gasolineras</title>
+  <link rel="stylesheet" th:href="@{/css/gasolinera.css}">
+
+</head>
+<body class="container">
+<nav>
+  <ul>
+    <li><a href="/clientes/web">Clientes </a></li>
+    <li><a href="/provincias/web">Provincias </a></li>
+    <li><a href="/gasolineras/web">Gasolineras</a></li>
+  </ul>
+</nav>
+<a href="/gasolineras/nuevo">
+  <button type="submit">Crear Gasolinera</button>
+</a>
+<br><br>
+<div class="contenido">
+  <h1 text align="center">LISTADO DE GASOLINERAS</h1>
+  <div style="display:flex; justify-content: center; align-items:center; height:80px;">
+    <input type="text" id="buscador" placeholder="Buscar..." style="padding: 6px;width:250px;">
+    <script>
+      document.getElementById("buscador").addEventListener("input", function () {
+        let texto = this.value.toLowerCase();
+        let filas = document.querySelectorAll("tbody tr");
+
+        filas.forEach(fila => {
+          let contenido = fila.textContent.toLowerCase();
+          fila.style.display = contenido.includes(texto) ? "" : "none";
+        });
+      });
+    </script>
+  </div>
+  <br><br>
+  <table border="1" align="center">
+    <thead>
+    <tr>
+      <th>ID Gasolinera</th>
+      <th>Nombre</th>
+      <th>Activa</th>
+      <th>Precio de la gasolina</th>
+      <th>Provincia</th>
+      <th>Opciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="g : ${gasolinera}">
+      <form th:action="@{/gasolineras/guardar}" method="post">
+        <td>
+          <span th:if="${editingId != g.gasStationId}"
+                th:text="${g.gasStationId}"></span>
+          <input th:if="${editingId == g.gasStationId}"
+                 type="text"
+                 name="gasStationId"
+                 th:value="${g.gasStationId}">
+        </td>
+        <td>
+          <span th:if="${editingId != g.gasStationId}"
+                th:text="${g.name}"></span>
+          <input th:if="${editingId == g.gasStationId}"
+                 type="text"
+                 name="name"
+                 th:value="${g.name}">
+        </td>
+        <td>
+          <span th:if="${editingId != g.gasStationId}"
+                th:text="${g.active}">
+          </span>
+          <input th:if="${editingId == g.gasStationId}"
+                 type="text"
+                 name="active"
+                 th:value="${g.active}">
+        </td>
+        <td>
+          <span th:if="${editingId != g.gasStationId}"
+                th:text="${g.petrolPrice}"></span>
+          <input th:if="${editingId == g.gasStationId}"
+                 type="text"
+                 name="petrolPrice"
+                 th:value="${g.petrolPrice}">
+        </td>
+
+      <td th:text="${g.province?.name}"></td>
+
+        <!-- OPCIONES -->
+        <td>
+          <div class ="acciones">
+            <div th:if="${editingId != g.gasStationId}" class="normal">
+              <a class ="editar" th:href="@{/gasolineras/web(editingId=${g.gasStationId})}">Editar</a>
+              <a class ="borrar" th:href="@{'/gasolineras/eliminar/' + ${g.gasStationId}}" onclick="return confirm('Seguro que quieres eliminar esta gasolinera?')">Eliminar</a>
+            </div>
+            <div th:if="${editingId == g.gasStationId}" class="edicion">
+              <button type="submit" class="guardar">Guardar</button>
+              <button type="button" class="cancelar" onclick="window.location.href='/gasolineras/web'">Cancelar</button>
+            </div>
+          </div>
+        </td>
+      </form>
+    </tr>
+    </tbody>
+
+  </table>
+</div>
+</body>
+</html>

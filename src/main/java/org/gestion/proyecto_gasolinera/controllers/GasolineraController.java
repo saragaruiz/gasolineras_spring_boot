@@ -22,36 +22,46 @@ public class GasolineraController {
     @GetMapping("/web")
     public String listar(@RequestParam(required = false) Long editingId, Model model) {
 
-        model.addAttribute("gasolinera", gasolineraService.verGasolineras());
+        model.addAttribute("gasolineras", gasolineraService.verGasolineras());
+        model.addAttribute("provincias", provinciaService.verProvincias());
         model.addAttribute("editingId", editingId);
 
-        return "gasolinera";
+        return "gasolineras";
     }
 
     @GetMapping("/nuevo")
     public String nuevaGasolinera(Model model) {
-        model.addAttribute("gasolinera", new Gasolinera());
+        model.addAttribute("gasolineras", new Gasolinera());
         model.addAttribute("provincias", provinciaService.verProvincias());
         return "nuevaGasolinera";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Gasolinera g,
-                          @RequestParam int provinceId) {
+    public String guardar(@RequestParam int id, @RequestParam String name, @RequestParam boolean active,  @RequestParam double petrolPrice, @RequestParam int province){
+        Gasolinera gasolinera = gasolineraService.findById(id);
+        if(gasolinera == null){
+            return "redirect:/gasolineras/web";
+        }
+        gasolinera.setName(name);
+        gasolinera.setActive(String.valueOf(active));
+        gasolinera.setPetrolPrice(petrolPrice);
+        Provincia p = provinciaService.findById(province);
+        gasolinera.setProvince(p);
+       gasolineraService.guardarGasolinera(gasolinera);
 
-        Provincia p = provinciaService.findById(provinceId);
-
-        g.setProvince(p);
-        g.setActive("true");
-
-        gasolineraService.guardarGasolinera(g);
         return "redirect:/gasolineras/web";
     }
-
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable int id) {
         gasolineraService.borrarGasolinera(id);
         return "redirect:/gasolineras/web";
+    }
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable int id, Model model) {
+        model.addAttribute("gasolineras", gasolineraService.verGasolineras());
+        model.addAttribute("provincias", provinciaService.verProvincias());
+        model.addAttribute("editingId", id);
+        return "gasolineras";
     }
 }
 

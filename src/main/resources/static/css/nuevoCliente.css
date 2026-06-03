@@ -1,0 +1,56 @@
+body{
+    font-family: Arial, "Sans Serif Collection";
+    background-color: #7f78ec;
+    margin:0;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.registro{
+    background-color: #003cff;
+    padding:20px;
+    width:350px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.registro h2{
+    text-align: center;
+    margin-bottom:20px;
+    letter-spacing: 1px;
+}
+.registro input{
+    width: 95%;
+    padding: 11px;
+    margin-bottom:12px;
+    border:1px solid black;
+    border: 8px;
+    outline: none;
+    transition:0.25s;
+    font-size: 14px;
+}
+.registro input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.15);
+}
+
+.registro button {
+    width: 100%;
+    padding: 11px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    transition: 0.25s;
+}
+.registro button:hover {
+    background: #357ABD;
+    transform: translateY(-1px);
+}
+
+.registro button:active {
+    transform: translateY(0px);
+}

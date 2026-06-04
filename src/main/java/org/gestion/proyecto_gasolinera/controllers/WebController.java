@@ -33,15 +33,22 @@ public class WebController {
     public String loginWeb(@RequestParam String username,
                            @RequestParam String pass,
                            Model model) {
-        System.out.println("Usuario: " + username);
 
         Cliente cliente = clienteService.login(username, pass);
         if(cliente != null){
-            model.addAttribute("cliente", cliente);
-            model.addAttribute("cliente", clienteService.verClientes());
-        return "redirect:/clientes/web";
+            if(cliente.isAdmin()){
+                return "redirect:/clientes/web";
+            }else{
+                return "redirect:/clientes/perfil/" + cliente.getClientId();
+            }
         }
             return "login";
+    }
+    @GetMapping("/clientes/perfil/{id}")
+    public String verPerfil(@PathVariable int id, Model model) {
+        Cliente cliente = clienteService.findById(id);
+        model.addAttribute("cliente", cliente);
+        return "vistaCliente";
     }
 
     @GetMapping("/clientes/web")
@@ -146,6 +153,26 @@ public class WebController {
         clienteService.actualizarCliente(cliente);
         return "redirect:/clientes/web";
     }
-
+    @PostMapping("/clientes/crear-cuenta")
+    public String crearCuenta(@RequestParam String name,
+                              @RequestParam String surname,
+                              @RequestParam String username,
+                              @RequestParam String nif,
+                              @RequestParam String pass) {
+        Cliente cliente = new Cliente();
+        cliente.setName(name);
+        cliente.setSurname(surname);
+        cliente.setUsername(username);
+        cliente.setNif(nif);
+        cliente.setPass(pass);
+        cliente.setActive(true);
+        cliente.setIsAdmin(false);
+        clienteService.guardarCliente(cliente);
+        return "crearCuenta";
+    }
+    @GetMapping("/clientes/crear-cuenta")
+    public String verCrearCuenta() {
+        return "crearCuenta";
+    }
 }
 

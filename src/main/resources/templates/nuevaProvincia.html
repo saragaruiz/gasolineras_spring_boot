@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Crear Provincia</title>
+    <link rel="stylesheet" th:href="@{/css/nuevoCliente.css}">
+
 </head>
 <body>
-$END$
+<div class="registro">
+    <h2>CREAR PROVINCIA</h2>
+    <form action="/provincias/guardar" method="post">
+        <input type="number" name="provinceId" placeholder="Cod.Postal">
+        <input type="text" name="name" placeholder="Nombre">
+        <input type="date" name="creationDate" placeholder="Fecha">
+        <button type="submit">Guardar</button>
+        <button type="button" class="cancelar" onclick="window.location.href='/provincias/web'">Cancelar</button>
+
+    </form>
+</div>
 </body>
 </html>

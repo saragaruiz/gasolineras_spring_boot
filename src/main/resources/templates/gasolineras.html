@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Gasolineras</title>
-  <link rel="stylesheet" th:href="@{/css/gasolinera.css}">
+  <link rel="stylesheet" th:href="@{/css/cliente.css}">
 
 </head>
 <body class="container">
@@ -48,15 +48,15 @@
     </thead>
 
     <tbody>
-    <tr th:each="g : ${gasolinera}">
+    <tr th:each="g : ${gasolineras}">
       <form th:action="@{/gasolineras/guardar}" method="post">
-        <td>
+      <td>
           <span th:if="${editingId != g.gasStationId}"
                 th:text="${g.gasStationId}"></span>
-          <input th:if="${editingId == g.gasStationId}"
-                 type="text"
-                 name="gasStationId"
-                 th:value="${g.gasStationId}">
+        <input th:if="${editingId == g.gasStationId}"
+               type="text"
+               name="gasStationId"
+               th:value="${g.gasStationId}">
         </td>
         <td>
           <span th:if="${editingId != g.gasStationId}"
@@ -67,14 +67,15 @@
                  th:value="${g.name}">
         </td>
         <td>
-          <span th:if="${editingId != g.gasStationId}"
-                th:text="${g.active}">
-          </span>
-          <input th:if="${editingId == g.gasStationId}"
-                 type="text"
-                 name="active"
-                 th:value="${g.active}">
+    <span th:if="${editingId != g.gasStationId}"
+          th:text="${g.active}">
+    </span>
+          <select name="active" th:if="${editingId == g.gasStationId}">
+            <option value="Activo" th:selected="${g.active == 'true'}">Activo</option>
+            <option value="Inactivo" th:selected="${g.active == 'false'}">Inactivo</option>
+          </select>
         </td>
+
         <td>
           <span th:if="${editingId != g.gasStationId}"
                 th:text="${g.petrolPrice}"></span>
@@ -83,19 +84,31 @@
                  name="petrolPrice"
                  th:value="${g.petrolPrice}">
         </td>
+        <td>
+          <span th:if="${editingId != g.gasStationId}"
+                th:text="${g.province?.name}"></span>
+          <select th:if="${editingId == g.gasStationId}"
+                  name="provinceId">
+            <option value="">Sin Asignar</option>
+            <option th:each="p : ${provincias}"
+                    th:value="${p.provinceId}"
+                    th:text="${p.name}"
+                    th:selected="${g.province != null and p.provinceId == g.province.provinceId}">
+            </option>
+          </select>
+          </td>
 
-      <td th:text="${g.province?.name}"></td>
 
         <!-- OPCIONES -->
         <td>
           <div class ="acciones">
             <div th:if="${editingId != g.gasStationId}" class="normal">
-              <a class ="editar" th:href="@{/gasolineras/web(editingId=${g.gasStationId})}">Editar</a>
+              <a class ="editar" th:href="@{'/gasolineras/editar/' + ${g.gasStationId}}">Editar</a>
               <a class ="borrar" th:href="@{'/gasolineras/eliminar/' + ${g.gasStationId}}" onclick="return confirm('Seguro que quieres eliminar esta gasolinera?')">Eliminar</a>
             </div>
             <div th:if="${editingId == g.gasStationId}" class="edicion">
-              <button type="submit" class="guardar">Guardar</button>
-              <button type="button" class="cancelar" onclick="window.location.href='/gasolineras/web'">Cancelar</button>
+                <button type="submit" class="guardar">Guardar</button>
+                <button type="button" class="cancelar" onclick="window.location.href='/gasolineras/web'">Cancelar</button>
             </div>
           </div>
         </td>

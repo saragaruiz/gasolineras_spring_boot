@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corben:wght@400;700&family=Libertinus+Keyboard&family=Press+Start+2P&family=VT323&family=Yusei+Magic&display=swap" rel="stylesheet">
     <title>Iniciar Sesión</title>
 </head>
 <body class="log">
 <div class="inicio">
     <h2>INICIAR SESIÓN</h2>
+    <img src="/img/logo.png" alt="logo">
 <form action="/clientes/login-web" method="post">
     <label>Usuario: </label>
     <input type="text" name="username"/>
-    <br><br>
     <label>Contraseña: </label>
     <input type="password" name="pass"/>
-    <br><br>
     <button type="submit">Iniciar Sesión</button>
+    <button type="button" onclick="window.location.href='/clientes/crear-cuenta'">Crear Cuenta</button>
 </form>
 </div>
 </body>

@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: 'Poppins', Arial, sans-serif;
+    font-family:  sans-serif;
     background: linear-gradient(135deg, #f7f7ff, #fff0f6);
     color: #333;
     }
@@ -24,6 +24,9 @@ nav a {
     color: #6a5acd;
     font-weight: 600;
     transition: 0.3s;
+}
+nav .sesion{
+    margin-left: auto;
 }
 nav a:hover {
     color: #0800bc;
@@ -49,6 +52,15 @@ button {
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
 }
+.filtrar{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+
+
+
+}
 table {
     width: 90%;
     margin: 20px auto;
@@ -56,8 +68,19 @@ table {
     border-radius: 5px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
+th{
+    background:#6a5acd;
+    color:white;
+    padding:14px;
+}
+td{
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
 tbody tr:hover {
-    background: #7f78ec;
+    background: #B4A8FF;
 }
 td button {
     background: #a483f8;
@@ -68,6 +91,7 @@ td button {
 td button:hover {
     background: #4336fd;
 }
+
 .acciones{
     display: flex;
     flex-direction: column;

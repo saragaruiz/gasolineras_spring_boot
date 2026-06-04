@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Nuevo Cliente</title>
+    <link rel="stylesheet" th:href="@{/css/nuevoCliente.css}">
 </head>
 <body>
 <div class="registro">
      <h2>CREAR CLIENTE</h2>
-      <form action="/clientes/guardar-web" method="post">
-        <input type="text" name="name" placeholder="Nombre">
-        <input type="text" name="surname" placeholder="Apellidos">
-        <input type="text" name="username" placeholder="Usuario">
-        <input type="text" name="nif" placeholder="DNI">
-        <input type="password" name="pass" placeholder="Contraseña">
-       <button type="submit">Guardar</button>
+        <form action="/clientes/guardar-web" method="post">
+            <input type="text" name="name" placeholder="Nombre">
+            <input type="text" name="surname" placeholder="Apellidos">
+            <input type="text" name="username" placeholder="Usuario">
+            <input type="text" name="nif" placeholder="DNI">
+            <input type="password" name="pass" placeholder="Contraseña">
+            <button type="submit">Guardar</button>
+            <button type="button" class="cancelar" onclick="window.location.href='/clientes/web'">Cancelar</button>
 </form>
 </div>
 </body>

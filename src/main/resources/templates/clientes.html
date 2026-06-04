@@ -13,20 +13,40 @@
         <li><a href="/clientes/web">Clientes </a></li>
         <li><a href="/provincias/web">Provincias </a></li>
         <li><a href="/gasolineras/web">Gasolineras</a></li>
+        <li class ="sesion"><a href="/login">Cerrar Sesión</a></li>
+        <li class ="cambiar"><a href="/clientes/cambiar-password">Cambiar Contraseña</a></li>
     </ul>
 </nav>
 <a href="/clientes/nuevo">
 <button type="submit">Crear cliente</button>
 </a>
-<br><br>
-<button type="submit">Asignar Gasolinera</button>
-<button type="submit">Quitar Gasolinera</button>
-<button type="submit">Asignar Admin</button>
-
+<br>
 <div class="contenido">
     <h1 text align="center">LISTADO DE CLIENTES</h1>
-<input align="center" type="text" placeholder="Buscar...">
-<br><br>
+    <div style="display:flex; justify-content: center; align-items:center; height:80px;">
+    <input type="text" id="buscador" placeholder="Buscar..." style="padding: 6px;width:250px;">
+    <script>
+        document.getElementById("buscador").addEventListener("input", function () {
+            let texto = this.value.toLowerCase();
+            let filas = document.querySelectorAll("tbody tr");
+
+            filas.forEach(fila => {
+                let contenido = fila.textContent.toLowerCase();
+                fila.style.display = contenido.includes(texto) ? "" : "none";
+            });
+        });
+    </script>
+    </div>
+
+    <br><br>
+    <div class="filtrar">
+    <a th:href="@{/clientes/web}">
+        <button>Ver Todos</button>
+    </a>
+    <a th:href="@{/clientes/web(soloActivos=true)}">
+        <button>Ver Activos</button>
+    </a>
+    </div>
 <table border="1" align="center">
     <thead>
     <tr>
@@ -85,29 +105,51 @@
             </td>
 
             <td>
-                <span th:if="${editingId != c.clientId}" th:text="${c.active}"></span>
-                <input th:if="${editingId == c.clientId}"
-                   type="text"
-                   name="active"
-                   th:value="${c.active}" />
-        </td>
+    <span th:if="${editingId != c.clientId}"
+          th:text="${c.active ? 'Activo' : 'Inactivo'}">
+    </span>
 
-        <td th:text="${c.gasStation != null ? c.gasStation.name : 'Sin asignar'}"></td>
+                <select name="active" th:if="${editingId == c.clientId}">
+                    <option value="true" th:selected="${c.active}">Activo</option>
+                    <option value="false" th:selected="${!c.active}">Inactivo</option>
+                </select>
+            </td>
+
+            <td>
+    <span th:if="${editingId != c.clientId}"
+          th:text="${c.gasStation != null ? c.gasStation.name : 'Sin asignar'}">
+    </span>
+
+                <select th:if="${editingId == c.clientId}"
+                        name="gasStationId">
+                    <option value="">Sin asignar</option>
+                    <option th:each="g : ${gasolineras}"
+                            th:value="${g.gasStationId}"
+                            th:text="${g.name}"
+                            th:selected="${c.gasStation != null and c.gasStation.gasStationId == g.gasStationId}">
+                    </option>
+                </select>
+            </td>
+
         <td th:text="${c.isAdmin ? 'ADMIN' : 'CLIENTE'}"></td>
 
             <!--OPCIONES -->
         <td>
-            <a th:if="${editingId != c.clientId}"
-               th:href="@{/clientes/web(editingId=${c.clientId})}">
-                Editar
-            </a>
-            <a th:href="@{'/clientes/admin/' + ${c.clientId}}">
-                Admin
-            </a>
-                <input type="hidden" name="id" th:value="${c.clientId}">
-                <button type="submit" th:if="${editingId == c.clientId}">Guardar</button>
-            <input type="hidden" name="id" th:value="${c.clientId}">
-            <button type="submit" th:if="${editingId == c.clientId}">Cancelar</button>
+            <div class="acciones">
+                <div th:if="${editingId != c.clientId}" class="normal">
+                    <a class="editar" th:href="@{/clientes/web(editingId=${c.clientId})}">Editar</a>
+                    <a class="borrar" th:href="@{'/clientes/eliminar/' + ${c.clientId}}" onclick="return confirm('¿Seguro que quiere eliminar este cliente?')">Eliminar</a>
+
+                    <a th:if="${!c.admin}" class="admin" th:href="@{'/clientes/admin/' + ${c.clientId}}"> Admin</a>
+                    <a th:if="${c.admin}" class="noAdmin" th:href="@{'/clientes/quitar-admin/' + ${c.clientId}}">Quitar Admin</a>
+                </div>
+                <div th:if="${editingId == c.clientId}" class="edicion">
+                    <button type="submit" class="guardar">Guardar</button>
+                    <button type="button" class="cancelar" onclick="window.location.href='/clientes/web'">Cancelar</button>
+            </div>
+            </div>
+
+
         </form>
         </td>
     </tr>

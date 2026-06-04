@@ -1,11 +1,22 @@
 body.log{
-    background-color: rgb(37 0 170 / 0.15);
+    background: linear-gradient(135deg, #608aed, #FFB01F);
     margin:0;
     height: 100vh;
     display:flex;
     justify-content:center;
     align-items: center;
-    font-family: Calibri, sans-serif;
+    font-family: "Corben", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+img{
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    background: white;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    margin-bottom:15px;
 }
 .inicio{
     background-color: #D1B8FF;
@@ -13,7 +24,6 @@ body.log{
     border-radius:12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     width:500px;
-    height:400px;
     text-align: center;
 }
 .inicio input{
@@ -25,16 +35,24 @@ body.log{
 }
 .inicio button{
     width:100%;
-    padding:10px;
-    color:#3900A3;
-    border:1px solid #3900A3 ;
+    padding:12px;
+    background:#1600AD;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
     cursor:pointer;
-    margin-top:10px;
+    transition:0.3s;
+    margin-bottom: 20px;
 }
 .inicio button:hover{
-    background: #7E20B3;
-    color:white;
+    background: #FFB01F;
+    color:black;
 }
 .inicio h2{
+    color:#1600AD;
     margin-bottom: 20px;
+    font-size: 28px;
+    letter-spacing: 3px;
 }

@@ -82,16 +82,9 @@ public class ClienteService {
     //Login
     public Cliente login(String username, String pass) {
         Cliente cliente = clienteRepository.findByUsername(username);
-        if (cliente == null) {
-            return null;
-        }
-
-        if (cliente.getPass() == null) {
-            return null;
-        }
-        if (passwordEncoder.matches(pass, cliente.getPass())) {
-            return cliente;
-        }
+        if (cliente == null) return null;
+        if (cliente.getPass() == null) return null;
+        if (passwordEncoder.matches(pass, cliente.getPass())) return cliente;
         return null;
     }
 
@@ -130,5 +123,8 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(clientId).orElseThrow();
         cliente.setIsAdmin(false);
         return clienteRepository.save(cliente);
+    }
+    public List<Cliente>verClientesActivos() {
+        return clienteRepository.findByActiveTrue();
     }
 }

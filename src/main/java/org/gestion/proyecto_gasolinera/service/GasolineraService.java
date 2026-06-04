@@ -1,10 +1,13 @@
 package org.gestion.proyecto_gasolinera.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.gestion.proyecto_gasolinera.DTO.GasolineraProvinciaDTO;
 import org.gestion.proyecto_gasolinera.Gasolinera;
 import org.gestion.proyecto_gasolinera.repositories.GasolineraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -30,8 +33,8 @@ public class GasolineraService {
 
         gasolineraRepository.deleteById(id);
     }
+
     public List<GasolineraProvinciaDTO> buscarPorProvincia(String provincia){
         return gasolineraRepository.buscarPorProvincia(provincia);
     }
-
-}
+    }

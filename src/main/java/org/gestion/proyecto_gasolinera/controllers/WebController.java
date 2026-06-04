@@ -45,14 +45,19 @@ public class WebController {
     }
 
     @GetMapping("/clientes/web")
-    public String listar(@RequestParam(required = false) Long editingId, Model model) {
-
-        model.addAttribute("clientes", clienteService.verClientes());
+    public String listar(@RequestParam(required = false) Boolean soloActivos, Long editingId, Model model) {
+        if (Boolean.TRUE.equals(soloActivos)) {
+            model.addAttribute("clientes", clienteService.verClientesActivos());
+        } else {
+            model.addAttribute("clientes", clienteService.verClientes());
+        }
         model.addAttribute("gasolineras", gasolineraService.verGasolineras());
         model.addAttribute("editingId", editingId);
+        model.addAttribute("soloActivos", soloActivos);
 
         return "clientes";
     }
+
     @GetMapping("/clientes/nuevo")
     public String nuevoCliente(){
         return "nuevoCliente";
@@ -93,7 +98,7 @@ public class WebController {
     }
 
     @PostMapping("/clientes/guardar")
-    public String guardar(@RequestParam int id, @RequestParam String name, @RequestParam String surname,  @RequestParam String username, @RequestParam String nif, @RequestParam String active, @RequestParam(required = false)Integer gasStationId){
+    public String guardar(@RequestParam int id, @RequestParam String name,  @RequestParam String surname,  @RequestParam String username, @RequestParam String nif, @RequestParam String active, @RequestParam(required = false)Integer gasStationId, Model model) {
         Cliente cliente = clienteService.findById(id);
         cliente.setName(name);
         cliente.setSurname(surname);
@@ -110,6 +115,7 @@ public class WebController {
 
         return "redirect:/clientes/web";
     }
+
     @PostMapping("/clientes/asignar-favorita")
     public String asignarFavorita(@RequestParam int clientId, @RequestParam(required = false) Integer gasStationId){
         if(gasStationId == null){
@@ -140,5 +146,6 @@ public class WebController {
         clienteService.actualizarCliente(cliente);
         return "redirect:/clientes/web";
     }
+
 }
 

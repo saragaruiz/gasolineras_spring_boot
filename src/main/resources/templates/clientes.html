@@ -13,6 +13,7 @@
         <li><a href="/clientes/web">Clientes </a></li>
         <li><a href="/provincias/web">Provincias </a></li>
         <li><a href="/gasolineras/web">Gasolineras</a></li>
+        <li><a href ="/clientes/registros/">Ver Registros</a></li>
         <li class ="sesion"><a href="/login">Cerrar Sesión</a></li>
         <li class ="cambiar"><a href="/clientes/cambiar-password">Cambiar Contraseña</a></li>
     </ul>
@@ -143,7 +144,7 @@
                     <a th:if="${!c.admin}" class="admin" th:href="@{'/clientes/admin/' + ${c.clientId}}"> Admin</a>
                     <a th:if="${c.admin}" class="noAdmin" th:href="@{'/clientes/quitar-admin/' + ${c.clientId}}">Quitar Admin</a>
                 </div>
-                <div th:if="${editingId == c.clientId}" class="edicion">
+                <div th:if="${editingId != null and editingId == c.clientId}" class="edicion">
                     <button type="submit" class="guardar">Guardar</button>
                     <button type="button" class="cancelar" onclick="window.location.href='/clientes/web'">Cancelar</button>
             </div>

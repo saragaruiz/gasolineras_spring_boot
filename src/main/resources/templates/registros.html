@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/registros.css}">
+
+    <title>Registros</title>
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="/clientes/web">Atrás</a></li>
+    </ul>
+</nav>
+<h2>REGISTROS DE USUARIOS</h2>
+
+<form action="/clientes/registros" method="get" class="buscador">
+    <input type ="text" name="buscar" placeholder="Buscar..." th:value="${buscar}">
+    <button type="submit">Buscar</button>
+    <button th:if="${buscar != null}" type="button" onclick="window.location.href='/clientes/registros'">Limpiar</button>
+</form>
+<div th:if="${registros.isEmpty()}" class="vacio">
+    No hay registros que mostrar.
+</div>
+<table th:if="${!registros.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Gasolinera</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${registros}">
+        <td th:text="${r.cliente.name + ' ' + r.cliente.surname}"></td>
+        <td th:text="${r.creationDate}"></td>
+        <td th:text="${r.tipo}"></td>
+        <td th:text="${r.gasolinera != null ? r.gasolinera.name : '-'}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/vistaCliente.css}">
@@ -10,21 +10,72 @@
         <ul>
             <li class ="sesion"><a href="/login">Cerrar Sesión</a></li>
             <li class ="cambiar"><a href="/clientes/cambiar-password">Cambiar Contraseña</a></li>
+            <li class="perfil"><a th:href="@{/clientes/editar-perfil/{id}(id=${cliente.clientId})}">Editar Perfil</a></li>
         </ul>
     </nav>
     <div class="pag">
-<h2 class="saludo">HOLA <span th:text="${cliente.name.toUpperCase()}"></span></h2>
+    <h2 class="saludo">HOLA <span th:text="${cliente.name.toUpperCase()}"></span></h2>
+
     <div class="datos">
+        <p class ="personal">Mis datos personales</p>
         <div class="avatar" th:text="${#strings.toUpperCase(#strings.substring(cliente.name, 0, 1)) + #strings.toUpperCase(#strings.substring(cliente.surname, 0, 1))}"></div>
         <p th:text="${'@' + cliente.username}"></p>
+        <span class="badge" th:classappend="${cliente.active ? '' : 'badge-off'}">
+          <i class="ti ti-check" th:if="${cliente.active}"></i>
+          <i class="ti ti-x" th:unless="${cliente.active}"></i>
+        <span th:text="${cliente.active ? 'Cuenta activa' : 'Cuenta inactiva'}"></span>
+        </span>
 
-        <p class ="personal">Mis datos personales</p>
-<p>Nombre: <span th:text="${cliente.name}"></span></p>
-<p>Apellidos: <span th:text="${cliente.surname}"></span></p>
-<p>Usuario: <span th:text="${cliente.username}"></span></p>
-<p>DNI: <span th:text="${cliente.nif}"></span></p>
-<p>Activo: <span th:text="${cliente.active}"></span></p>
-<p>Gasolinera Favorita: <span th:text="${cliente.gasStation != null ? cliente.gasStation.name : 'Sin asignar'}"></span></p>
+        <form th:action="@{/clientes/guardar}" method="post">
+            <input type="hidden" name="id" th:value="${cliente.clientId}">
+
+        <p>Nombre: <span th:if="${editingId != cliente.clientId}" th:text="${cliente.name}"></span></p>
+        <input th:if="${editingId == cliente.clientId}"
+               type="text"
+               name="name"
+               th:value="${cliente.name}">
+
+<p>Apellidos: <span th:if="${editingId != cliente.clientId}" th:text="${cliente.surname}"></span></p>
+        <input th:if="${editingId == cliente.clientId}"
+               type="text"
+               name="surname"
+               th:value="${cliente.surname}">
+<p>Usuario: <span th:if="${editingId != cliente.clientId}" th:text="${cliente.username}"></span></p>
+        <input th:if="${editingId == cliente.clientId}"
+               type="text"
+               name="username"
+               th:value="${cliente.username}">
+<p>DNI: <span th:if="${editingId != cliente.clientId}" th:text="${cliente.nif}"></span></p>
+        <input th:if="${editingId == cliente.clientId}"
+               type="text"
+               name="nif"
+               th:value="${cliente.nif}">
+            <input type="hidden" name="id" th:value="${cliente.clientId}">
+            <select th:if="${editingId == cliente.clientId}" name="active">
+            <option value="true" th:selected="${cliente.active}">Activo</option>
+            <option value = "fasle" th:selected="${cliente.active}">Dar de baja</option>
+        </select>
+    <br/>
+            <p>Gasolinera Favorita: </p>
+    <span th:if="${editingId != cliente.clientId}"
+          th:text="${cliente.gasStation != null ? cliente.gasStation.name : 'Sin asignar'}">
+    </span>
+                <select th:if="${editingId == cliente.clientId}"
+                        name="gasStationId">
+                    <option value="">Sin asignar</option>
+                    <option th:each="g : ${gasolineras}"
+                            th:value="${g.gasStationId}"
+                            th:text="${g.name}"
+                            th:selected="${cliente.gasStation != null and cliente.gasStation.gasStationId == g.gasStationId}">
+                    </option>
+                </select>
+
+            <div th:if="${editingId != null and editingId == cliente.clientId}" class="edicion">
+                <button type="submit" class="guardar">Guardar</button>
+                <button type="button" class="cancelar" th:onclick="'window.location.href=\'/clientes/perfil/' + ${cliente.clientId} + '\''">Cancelar
+                </button>
+            </div>
+        </form>
     </div>
     </div>
 </body>

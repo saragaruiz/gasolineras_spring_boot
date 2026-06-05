@@ -127,4 +127,24 @@ public class ClienteService {
     public List<Cliente>verClientesActivos() {
         return clienteRepository.findByActiveTrue();
     }
+
+    public List<Registros> verTodosRegistros() {
+        return registrosRepository.findAll();
+    }
+
+    public List<Registros> buscarRegistrosPorCliente(String buscar) {
+        return registrosRepository.findByClienteNameContainingIgnoreCase(buscar);
+    }
+    public void guardarRegistro(Cliente cliente, String tipo) {
+        Registros registro = new Registros();
+        registro.setCliente(cliente);
+        registro.setGasolinera(cliente.getGasStation());
+        registro.setCreationDate(LocalDate.now());
+        registro.setTipo(tipo);
+        registrosRepository.save(registro);
+    }
+    public Cliente findByUsername(String username) {
+        return clienteRepository.findByUsername(username);
+    }
 }
+

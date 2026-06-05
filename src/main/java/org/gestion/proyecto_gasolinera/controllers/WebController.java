@@ -2,6 +2,7 @@ package org.gestion.proyecto_gasolinera.controllers;
 
 import org.gestion.proyecto_gasolinera.Gasolinera;
 import org.gestion.proyecto_gasolinera.repositories.ClienteRepository;
+import org.gestion.proyecto_gasolinera.repositories.RegistrosRepository;
 import org.gestion.proyecto_gasolinera.service.GasolineraService;
 import org.springframework.ui.Model;
 import org.gestion.proyecto_gasolinera.Cliente;
@@ -17,11 +18,13 @@ public class WebController {
     private final ClienteService clienteService;
     private final ClienteRepository clienteRepository;
     private final GasolineraService gasolineraService;
+    private final RegistrosRepository registrosRepository;
 
-    public WebController(ClienteService clienteService,  ClienteRepository clienteRepository, GasolineraService gasolineraService) {
+    public WebController(ClienteService clienteService,  ClienteRepository clienteRepository, GasolineraService gasolineraService, RegistrosRepository registrosRepository) {
         this.clienteService = clienteService;
         this.clienteRepository = clienteRepository;
         this.gasolineraService = gasolineraService;
+        this.registrosRepository = registrosRepository;
     }
 
     @GetMapping("/login")
@@ -48,11 +51,12 @@ public class WebController {
     public String verPerfil(@PathVariable int id, Model model) {
         Cliente cliente = clienteService.findById(id);
         model.addAttribute("cliente", cliente);
+        model.addAttribute("gasolineras", gasolineraService.verGasolineras());
         return "vistaCliente";
     }
 
     @GetMapping("/clientes/web")
-    public String listar(@RequestParam(required = false) Boolean soloActivos, Long editingId, Model model) {
+    public String listar(@RequestParam(required = false) Boolean soloActivos,@RequestParam(required = false) Long editingId, Model model) {
         if (Boolean.TRUE.equals(soloActivos)) {
             model.addAttribute("clientes", clienteService.verClientesActivos());
         } else {
@@ -78,22 +82,28 @@ public class WebController {
         cliente.setUsername(username);
         cliente.setNif(nif);
         cliente.setPass(pass);
-        clienteService.actualizarCliente(cliente);
+        cliente.setIsAdmin(false);
+        cliente.setActive(true);
+        clienteService.guardarCliente(cliente);
+        clienteService.guardarRegistro(cliente, "Alta de cliente");
         return "redirect:/clientes/web";
     }
     @GetMapping("/clientes/eliminar/{id}")
     public String eliminarCliente(@PathVariable int id){
         clienteService.borrarCliente(id);
+        clienteService.guardarRegistro(clienteService.findById(id), "Cliente eliminado");
         return "redirect:/clientes/web";
     }
     @GetMapping("/clientes/admin/{id}")
     public String asignarAdmin(@PathVariable int id){
         clienteService.asignarAdmin(id);
+        clienteService.guardarRegistro(clienteService.findById(id), "Asignado como Admin");
         return "redirect:/clientes/web";
     }
    @GetMapping("/clientes/quitar-admin/{id}")
     public String quitarAdmin(@PathVariable int id){
         clienteService.quitarAdmin(id);
+       clienteService.guardarRegistro(clienteService.findById(id), "Quitado de Admin");
         return "redirect:/clientes/web";
     }
 
@@ -102,6 +112,13 @@ public class WebController {
         model.addAttribute("clientes", clienteService.verClientes());
         model.addAttribute("editingId", id);
         return "clientes";
+    }
+    @GetMapping("/clientes/editar-perfil/{id}")
+    public String editarPerfil(@PathVariable int id, Model model) {
+        model.addAttribute("cliente", clienteService.findById(id));
+        model.addAttribute("gasolineras", gasolineraService.verGasolineras());
+        model.addAttribute("editingId", id);
+        return "vistaCliente";
     }
 
     @PostMapping("/clientes/guardar")
@@ -118,9 +135,9 @@ public class WebController {
         } else {
             cliente.setGasStation(null);
         }
-        clienteService.guardarCliente(cliente);
-
-        return "redirect:/clientes/web";
+        clienteService.actualizarCliente(cliente);
+        clienteService.guardarRegistro(cliente, "Perfil editado");
+        return "redirect:/clientes/perfil/" + id;
     }
 
     @PostMapping("/clientes/asignar-favorita")
@@ -132,6 +149,7 @@ public class WebController {
         Gasolinera g = gasolineraService.findById(gasStationId);
         c.setGasStation(g);
         clienteService.guardarCliente(c);
+        clienteService.guardarRegistro(c, "Gasolinera marcada como favorita");
         return "redirect:/clientes/web";
     }
     @GetMapping("/clientes/cambiar-password")
@@ -143,7 +161,8 @@ public class WebController {
                                   @RequestParam String nuevaPass) {
 
         clienteService.cambiarContraseña(username, nuevaPass);
-
+        Cliente cliente= clienteService.findByUsername(username);
+        clienteService.guardarRegistro(cliente, "Contraseña cambiada");
         return "redirect:/clientes/web";
     }
     @GetMapping("/clientes/baja/{id}")
@@ -151,6 +170,7 @@ public class WebController {
         Cliente cliente = clienteService.findById(id);
         cliente.setActive(false);
         clienteService.actualizarCliente(cliente);
+        clienteService.guardarRegistro(cliente, "Baja");
         return "redirect:/clientes/web";
     }
     @PostMapping("/clientes/crear-cuenta")
@@ -174,5 +194,17 @@ public class WebController {
     public String verCrearCuenta() {
         return "crearCuenta";
     }
+    @GetMapping({"/clientes/registros", "/clientes/registros/"})
+    public String verRegistros(@RequestParam(required = false) String buscar, Model model) {
+        if (buscar != null && !buscar.isBlank()) {
+            model.addAttribute("registros", clienteService.buscarRegistrosPorCliente(buscar));
+        } else {
+            model.addAttribute("registros", clienteService.verTodosRegistros());
+        }
+        model.addAttribute("buscar", buscar);
+        return "registros";
+    }
+
+
 }
 

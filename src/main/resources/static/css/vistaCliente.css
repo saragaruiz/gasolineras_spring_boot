@@ -22,7 +22,7 @@ nav ul{
     display: flex;
     list-style-type: none;
 }
-nav ul li a {
+nav ul li a{
     color: rgba(255,255,255,0.85);
     padding: 6px 12px;
     border-radius: 10px;
@@ -41,11 +41,12 @@ nav a:hover {
     color: #0800bc;
 }
 h2{
+    margin-top:20px;
     text-align: center;
     color: #0800bc;
 }
 .page{
-    max-width: 600px;
+    max-width: 400px;
     margin:2.5rem auto;
     padding: 0 1rem;
 }
@@ -74,11 +75,13 @@ h2{
     border: 1px solid #e0dff5;
     border-radius: 14px;
     padding: 1.5rem 2rem;
+    text-align: center;
 
 }
 .datos p{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap:8px;
     padding: 10px 0;
     border-bottom: 1px solid #f3f3f3;
     color: #888;
@@ -91,4 +94,41 @@ h2{
 }
 .personal{
     text-decoration: underline;
+}
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 8px;
+    background: #eaf3de;
+    color: #3b6d11;
+}
+.badge-off {
+    background: #fcebeb;
+    color: #a32d2d;
+}
+.edicion{
+    display: flex;
+    justify-content: center;
+    gap:10px;
+    margin-top: 20px;
+}
+button{
+    background-color: #5b54d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.85);
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.25);
+    transition: background 0.2s;
+}
+button:hover{
+    background: rgb(49 61 89 / 0.32);
+    color: #0800bc;
+
 }

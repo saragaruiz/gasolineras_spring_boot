@@ -90,8 +90,9 @@ public class WebController {
     }
     @GetMapping("/clientes/eliminar/{id}")
     public String eliminarCliente(@PathVariable int id){
-        clienteService.borrarCliente(id);
+        Cliente cliente = clienteService.findById(id);
         clienteService.guardarRegistro(clienteService.findById(id), "Cliente eliminado");
+        clienteService.borrarCliente(id);
         return "redirect:/clientes/web";
     }
     @GetMapping("/clientes/admin/{id}")
@@ -148,7 +149,7 @@ public class WebController {
         Cliente c = clienteService.findById(clientId);
         Gasolinera g = gasolineraService.findById(gasStationId);
         c.setGasStation(g);
-        clienteService.guardarCliente(c);
+        clienteService.actualizarCliente(c);
         clienteService.guardarRegistro(c, "Gasolinera marcada como favorita");
         return "redirect:/clientes/web";
     }

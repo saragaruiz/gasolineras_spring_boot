@@ -106,3 +106,36 @@ h2{
     text-align: center;
     color: #0800bc;
 }
+.badge{
+    display: inline-block;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+.badge-alta{
+    background: #eaf3de;
+    color: #3b6d11;
+}
+.badge-baja{
+    background: #fcebeb;
+    color: #a32d2d;
+}
+.badge-edit{
+    background: #eeedfe;
+    color: #534ab7; }
+.badge-pass{
+    background: #faeeda;
+    color: #854f0b;
+}
+.badge-admin{
+    background: #e6f1fb;
+    color: #185fa5;
+}
+.badge-gas{
+    background: #e1f5ee;
+    color: #0f6e56;
+}
+.badge-default{
+    background: #f1efe8;
+    color: #5f5e5a; }

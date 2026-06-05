@@ -34,9 +34,19 @@
     <tbody>
     <tr th:each="r : ${registros}">
         <td th:text="${r.cliente.name + ' ' + r.cliente.surname}"></td>
-        <td th:text="${r.creationDate}"></td>
-        <td th:text="${r.tipo}"></td>
-        <td th:text="${r.gasolinera != null ? r.gasolinera.name : '-'}"></td>
+        <td class="fecha" th:text="${r.creationDate}"></td>
+        <td>
+            <span class="badge"
+                th:classappend="${r.tipo == 'Alta'} ? 'badge-alta' :
+                (${r.tipo == 'Baja'} ? 'badge-baja' :
+                (${r.tipo == 'Perfil editado'} ? 'badge-edit' :
+                (${r.tipo == 'Contraseña cambiada'} ? 'badge-pass' :
+                (${r.tipo == 'Asignado admin' or r.tipo == 'Quitado admin'} ? 'badge-admin' :
+                (${r.tipo == 'Gasolinera favorita cambiada'} ? 'badge-gas' : 'badge-default')))))"
+                th:text="${r.tipo}">
+            </span>
+        </td>
+        <td th:text="${r.gasolinera != null ? r.gasolinera.name : '—'}"></td>
     </tr>
     </tbody>
 </table>

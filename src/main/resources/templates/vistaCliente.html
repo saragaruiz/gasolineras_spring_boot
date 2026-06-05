@@ -50,11 +50,10 @@
                type="text"
                name="nif"
                th:value="${cliente.nif}">
-            <input type="hidden" name="id" th:value="${cliente.clientId}">
             <select th:if="${editingId == cliente.clientId}" name="active">
-            <option value="true" th:selected="${cliente.active}">Activo</option>
-            <option value = "fasle" th:selected="${cliente.active}">Dar de baja</option>
-        </select>
+                <option value="true"  th:attrappend="selected=${cliente.active ? 'selected' : null}">Activo</option>
+                <option value="false" th:attrappend="selected=${!cliente.active ? 'selected' : null}">Dar de baja</option>
+            </select>
     <br/>
             <p>Gasolinera Favorita: </p>
     <span th:if="${editingId != cliente.clientId}"

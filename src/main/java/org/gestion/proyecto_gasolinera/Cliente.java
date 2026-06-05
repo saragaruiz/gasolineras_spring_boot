@@ -18,11 +18,11 @@ public class Cliente {
     @Column(unique = true, nullable = false)
     private String nif;
     private String creationDate;
-    private boolean active;
+    private Boolean active;
     @ManyToOne
     @JoinColumn(name = "gasStationId")
     private Gasolinera gasStation;
-    private boolean isAdmin;
+    private Boolean isAdmin;
 
     public int getClientId() {
         return clientId;
@@ -80,11 +80,11 @@ public class Cliente {
         this.creationDate = creationDate;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -92,11 +92,11 @@ public class Cliente {
 
     public void setGasStation (Gasolinera gasStation){ this.gasStation = gasStation;}
 
-    public boolean isAdmin() {
+    public Boolean isAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
+    public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 }

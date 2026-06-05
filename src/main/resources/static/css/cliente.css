@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family:  sans-serif;
-    background: beige;
+    background: #f5f4fb;
     color: #333;
     }
 nav{
@@ -36,11 +36,13 @@ nav a:hover {
 }
 h1 {
     text-align: center;
-    color: #6a5acd;
-    margin-top: 20px;
-    font-size: 28px;
+    color: #5b54d6;
+    margin-top: 2rem;
+    font-size: 24px;
+    font-weight: 700;
     letter-spacing: 1px;
 }
+
 button {
     background: #003cff;
     border: none;
@@ -90,36 +92,40 @@ td button:hover {
 }
 
 .acciones{
-    display: flex;
-    flex-direction: column;
-    gap:10px;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
 }
-.acciones normal, .acciones edicion{
-    display: flex;
-    flex-wrap: wrap;
-    gap:6px;
+.editar, .borrar, .noAdmin, .admin {
+    text-decoration: none;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: opacity 0.2s;
 }
+.editar:hover, .borrar:hover, .noAdmin:hover, .admin:hover {
+    opacity: 0.75;
+}
+
 .editar{
     text-decoration: none;
-    background: #ff7100;
-    color:white;
-    border-radius: 5px;
+    background: #eaf3de;
+    color: #3b6d11;
 }
 .borrar{
     text-decoration: none;
-    background: #ff3b28;
-    color:white;
-    border-radius: 5px;
+    background: #fcebeb;
+    color: #a32d2d;
 }
 .noAdmin{
     text-decoration: none;
-    background: #1d5bfa;
-    color:white;
-    border-radius: 5px;
+    background: #faeeda;
+    color: #854f0b;
 }
 .admin{
     text-decoration: none;
-    background:#E2581D;
-    color:white;
-    border-radius: 5px;
+    background: #eeedfe;
+    color: #534ab7;
 }

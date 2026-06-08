@@ -1,9 +1,24 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 body {
     margin: 0;
     font-family: 'Poppins', Arial, sans-serif;
     background: linear-gradient(135deg, #f7f7ff, #fff0f6);
     color: #333;
 }
+.buscar {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.buscar input:focus {
+    border-color: #5b54d6;
+}
+
 nav{
     background-color: #D1B8FF;
     padding: 15px 30px;

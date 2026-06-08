@@ -1,5 +1,5 @@
 body{
-    font-family: Arial, "Sans Serif Collection";
+    font-family: Arial, "Sans Serif Collection", serif;
     background-color: #7f78ec;
     margin:0;
     height:100vh;
@@ -24,7 +24,6 @@ body{
     padding: 11px;
     margin-bottom:12px;
     border:1px solid black;
-    border: 8px;
     outline: none;
     transition:0.25s;
     font-size: 14px;

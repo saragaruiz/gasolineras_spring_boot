@@ -1,5 +1,5 @@
 body.log{
-    background: linear-gradient(135deg, #608aed, #FFB01F);
+    background: linear-gradient(135deg, #789ef8, #01398f);
     margin:0;
     height: 100vh;
     display:flex;
@@ -55,4 +55,13 @@ img{
     margin-bottom: 20px;
     font-size: 28px;
     letter-spacing: 3px;
+}
+.error{
+    color: #a32d2d;
+    background: #fcebeb;
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 8px;
 }

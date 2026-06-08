@@ -1,15 +1,12 @@
 package org.gestion.proyecto_gasolinera.controllers;
 
-import org.gestion.proyecto_gasolinera.Gasolinera;
 import org.gestion.proyecto_gasolinera.Provincia;
 import org.gestion.proyecto_gasolinera.repositories.ProvinciaRepository;
 import org.gestion.proyecto_gasolinera.service.ProvinciaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 @RequestMapping("/provincias")

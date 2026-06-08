@@ -1,10 +1,10 @@
 package org.gestion.proyecto_gasolinera.DTO;
 
 public class GasolineraProvinciaDTO {
-    private int gasStationId;
-    private String name;
-    private String provincia;
-    private String active;
+    final int gasStationId;
+    final String name;
+    final String provincia;
+    final String active;
 
     public GasolineraProvinciaDTO(int gasStationId, String name, String provincia, String active){
         this.gasStationId = gasStationId;
@@ -13,9 +13,6 @@ public class GasolineraProvinciaDTO {
         this.active = active;
     }
 
-    public int getGasStationId() {
-        return gasStationId;
-    }
 
     public String getName() {
         return name;

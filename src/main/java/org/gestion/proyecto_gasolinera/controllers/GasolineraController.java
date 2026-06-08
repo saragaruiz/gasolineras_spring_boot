@@ -19,8 +19,12 @@ public class GasolineraController {
     }
 
     @GetMapping("/web")
-    public String listar(@RequestParam(required = false) Long editingId, Model model) {
-
+    public String listar(@RequestParam(required = false) Long editingId,@RequestParam(required = false) String buscar, Model model) {
+        if (buscar != null && !buscar.isBlank()) {
+            model.addAttribute("gasolineras", gasolineraService.buscarGasolineras(buscar));
+        }else{
+            model.addAttribute("gasolineras", gasolineraService.verGasolineras());
+        }
         model.addAttribute("gasolineras", gasolineraService.verGasolineras());
         model.addAttribute("provincias", provinciaService.verProvincias());
         model.addAttribute("editingId", editingId);

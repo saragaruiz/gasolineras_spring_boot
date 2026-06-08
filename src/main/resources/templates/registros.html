@@ -14,11 +14,14 @@
 </nav>
 <h2>REGISTROS DE USUARIOS</h2>
 
-<form action="/clientes/registros" method="get" class="buscador">
-    <input type ="text" name="buscar" placeholder="Buscar..." th:value="${buscar}">
-    <button type="submit">Buscar</button>
-    <button th:if="${buscar != null}" type="button" onclick="window.location.href='/clientes/registros'">Limpiar</button>
+<form action="/clientes/registros" method="get" class="buscador" id="formBuscarRegistros">
+    <input type="text" name="buscar" placeholder="Buscar por nombre..."
+           th:value="${buscar}"
+           oninput="clearTimeout(window._t); window._t = setTimeout(() => document.getElementById('formBuscarRegistros').submit(), 400)"/>
+    <button th:if="${buscar != null}" type="button"
+            onclick="window.location.href='/clientes/registros'">Limpiar</button>
 </form>
+
 <div th:if="${registros.isEmpty()}" class="vacio">
     No hay registros que mostrar.
 </div>
@@ -49,6 +52,22 @@
         <td th:text="${r.gasolinera != null ? r.gasolinera.name : '—'}"></td>
     </tr>
     </tbody>
+    <div class="paginacion">
+        <a th:if="${paginaActual > 0}"
+           th:href="@{/clientes/registros(pagina=${paginaActual - 1}, buscar=${buscar})}">
+            &laquo; Anterior
+        </a>
+        <span th:each="i : ${#numbers.sequence(0, totalPaginas - 1)}">
+        <a th:href="@{/clientes/registros(pagina=${i}, buscar=${buscar})}"
+           th:text="${i + 1}"
+           th:classappend="${i == paginaActual} ? 'activa' : ''">
+        </a>
+    </span>
+        <a th:if="${paginaActual < totalPaginas - 1}"
+           th:href="@{/clientes/registros(pagina=${paginaActual + 1}, buscar=${buscar})}">
+            Siguiente &raquo;
+        </a>
+    </div>
 </table>
 
 </body>

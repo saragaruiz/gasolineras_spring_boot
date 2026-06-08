@@ -37,4 +37,7 @@ public class GasolineraService {
     public List<GasolineraProvinciaDTO> buscarPorProvincia(String provincia){
         return gasolineraRepository.buscarPorProvincia(provincia);
     }
+    public List<Gasolinera> buscarGasolineras(String buscar) {
+        return gasolineraRepository.findByNameContainingIgnoreCase(buscar);
+    }
     }

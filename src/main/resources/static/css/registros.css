@@ -4,7 +4,7 @@
     padding: 0;
 }
 body{
-    font-family: "Sans Serif Collection";
+    font-family: "Sans Serif", Arial, serif;
     background:#f5f4fb;
     min-height: 100vh;
 }
@@ -62,8 +62,8 @@ nav ul li a:hover {
     cursor: pointer;
 }
 .buscador button:hover {
-    background: #4a44b5
-; }
+    background: #4a44b5;
+}
 .buscador a {
     color: #888;
     text-decoration: none;
@@ -102,9 +102,11 @@ td button:hover {
     background: #4336fd;
 }
 h2{
-    margin-top:20px;
     text-align: center;
-    color: #0800bc;
+    color: #6a5acd;
+    margin-top: 20px;
+    font-size: 28px;
+    letter-spacing: 1px;
 }
 .badge{
     display: inline-block;
@@ -139,3 +141,27 @@ h2{
 .badge-default{
     background: #f1efe8;
     color: #5f5e5a; }
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin: 1.5rem 0;
+}
+.paginacion a {
+    padding: 6px 12px;
+    border: 1px solid #e0dff5;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #5b54d6;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+.paginacion a:hover {
+    background: #eeedfe;
+}
+.paginacion a.activa {
+    background: #5b54d6;
+    color: #fff;
+    border-color: #5b54d6;
+}

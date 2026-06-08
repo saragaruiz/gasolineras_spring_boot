@@ -34,6 +34,51 @@ nav a:hover {
 .container {
     padding: 20px;
 }
+.buscar {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+.buscador-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #e0dff5;
+    border-radius: 12px;
+    padding: 6px 12px;
+    width: 100%;
+    max-width: 420px;
+    transition: border-color 0.2s;
+}
+.buscador-inner:focus-within {
+    border-color: #5b54d6;
+}
+.buscador-inner i {
+    font-size: 16px;
+    color: #aaa;
+}
+.buscador-inner input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #1a1a1a;
+    flex: 1;
+    padding: 0;
+}
+.buscador-inner button {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    border: 1px solid #e0dff5;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+}
+.buscador-inner button:hover {
+    background: #f5f4fb;
+}
 h1 {
     text-align: center;
     color: #5b54d6;
@@ -44,7 +89,7 @@ h1 {
 }
 
 button {
-    background: #003cff;
+    background: #5b54d6;
     border: none;
     padding: 10px 15px;
     margin: 5px;
@@ -53,6 +98,9 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+}
+button:hover{
+    background-color: #0b038c;
 }
 .filtrar{
     display: flex;
@@ -128,4 +176,28 @@ td button:hover {
     text-decoration: none;
     background: #eeedfe;
     color: #534ab7;
+}
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin: 1.5rem 0;
+}
+.paginacion a {
+    padding: 6px 12px;
+    border: 1px solid #e0dff5;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #5b54d6;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+.paginacion a:hover {
+    background: #eeedfe;
+}
+.paginacion a.activa {
+    background: #5b54d6;
+    color: #fff;
+    border-color: #5b54d6;
 }

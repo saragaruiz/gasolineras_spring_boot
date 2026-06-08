@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Contraseña</title>
@@ -10,11 +10,21 @@
 <div class="cambio">
     <h2>CAMBIAR CONTRASEÑA</h2>
     <form action="/clientes/cambiar-password" method="post">
+        <input type="hidden" name="origen" th:value="${origen}"/>
+        <input type="hidden" name="clienteId" th:value="${clienteId}"/>
         <input type="text" name="username" placeholder="Usuario">
         <input type="password" name="nuevaPass" placeholder="Nueva Contraseña" required>
         <button type="submit">Cambiar Contraseña</button>
-        <button type="button" class="cancelar" onclick="window.location.href='/login/web'">Cancelar</button>
-
+        <button type="button" class="cancelar"
+                th:if="${origen == 'perfil'}"
+                th:onclick="'window.location.href=\'/clientes/perfil/' + ${clienteId} + '\''">
+            Cancelar
+        </button>
+        <button type="button" class="cancelar"
+                th:if="${origen == 'admin' or origen == null}"
+                onclick="window.location.href='/clientes/web'">
+            Cancelar
+        </button>
     </form>
 </div>
 </body>

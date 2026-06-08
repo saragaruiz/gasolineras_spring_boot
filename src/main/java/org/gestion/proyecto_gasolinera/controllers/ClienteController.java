@@ -5,6 +5,7 @@ import org.gestion.proyecto_gasolinera.service.ClienteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<Cliente>> index() {
-        return ResponseEntity.ok(clienteService.verClientes());
+        return ResponseEntity.ok(clienteService.verTodosClientes());
     }
 
     @PostMapping

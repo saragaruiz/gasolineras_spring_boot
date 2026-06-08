@@ -1,13 +1,14 @@
 package org.gestion.proyecto_gasolinera.service;
 
 import org.gestion.proyecto_gasolinera.Cliente;
-import org.gestion.proyecto_gasolinera.Gasolinera;
 import org.gestion.proyecto_gasolinera.Registros;
 import org.gestion.proyecto_gasolinera.repositories.ClienteRepository;
-import org.gestion.proyecto_gasolinera.repositories.GasolineraRepository;
 import org.gestion.proyecto_gasolinera.repositories.RegistrosRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,13 +16,11 @@ import java.util.List;
 @Service
 public class ClienteService {
     private final ClienteRepository clienteRepository;
-    private final GasolineraRepository gasolineraRepository;
     private final RegistrosRepository registrosRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ClienteService(ClienteRepository clienteRepository, GasolineraRepository gasolineraRepository, RegistrosRepository registrosRepository, PasswordEncoder passwordEncoder) {
+    public ClienteService(ClienteRepository clienteRepository, RegistrosRepository registrosRepository, PasswordEncoder passwordEncoder) {
         this.clienteRepository = clienteRepository;
-        this.gasolineraRepository = gasolineraRepository;
         this.registrosRepository = registrosRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -33,50 +32,22 @@ public class ClienteService {
     }
 
     //ver clientes
-    public List<Cliente> verClientes() {
-        return clienteRepository.findAll();
+    public Page<Cliente> verClientes(int pagina) {
+        Pageable pageable = PageRequest.of(pagina, 6);
+        return clienteRepository.findAll(pageable);
     }
-
     //Actualizar cliente
     public Cliente actualizarCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
-    public void actualizarDatos(int id, String name, String surname, String username, String nif) {
-        Cliente cliente = clienteRepository.findById(id).orElseThrow();
-
-        cliente.setName(name);
-        cliente.setSurname(surname);
-        cliente.setUsername(username);
-        cliente.setNif(nif);
-
-        clienteRepository.save(cliente);
-    }
-
-    //borrar cliente
     public void borrarCliente(int id) {
         clienteRepository.deleteById(id);
     }
 
-    //asociar gasolinera
     public Cliente findById(int id) {
         return clienteRepository.findById(id)
                 .orElse(null);
-    }
-
-    //quitar asociacion
-    public Cliente quitarAsociacion(int clientId) {
-        Cliente cliente = clienteRepository.findById(clientId).orElseThrow();
-        Gasolinera gasolineraAnterior = cliente.getGasStation();
-        cliente.setGasStation(null);
-        Cliente clienteActualizado = clienteRepository.save(cliente);
-        Registros registros = new Registros();
-        registros.setCliente(cliente);
-        registros.setGasolinera(gasolineraAnterior);
-        registros.setCreationDate(LocalDate.now());
-        registros.setTipo("Sin asociación");
-        registrosRepository.save(registros);
-        return clienteActualizado;
     }
 
     //Login
@@ -86,20 +57,6 @@ public class ClienteService {
         if (cliente.getPass() == null) return null;
         if (passwordEncoder.matches(pass, cliente.getPass())) return cliente;
         return null;
-    }
-
-    //Dar baja
-    public Cliente darBaja(String username) {
-        Cliente cliente = clienteRepository.findByUsername(username);
-        cliente.setActive(false);
-        return clienteRepository.save(cliente);
-    }
-
-    //dar alta
-    public Cliente darAlta(String username) {
-        Cliente cliente = clienteRepository.findByUsername(username);
-        cliente.setActive(true);
-        return clienteRepository.save(cliente);
     }
 
     //cambiar contraseña
@@ -124,17 +81,20 @@ public class ClienteService {
         cliente.setIsAdmin(false);
         return clienteRepository.save(cliente);
     }
-    public List<Cliente>verClientesActivos() {
-        return clienteRepository.findByActiveTrue();
+    public Page<Cliente> verClientesActivos(int pagina) {
+        Pageable pageable = PageRequest.of(pagina, 6);
+        return clienteRepository.findByActiveTrue(pageable);
     }
 
-    public List<Registros> verTodosRegistros() {
-        return registrosRepository.findAll();
+    public Page<Registros> verTodosRegistros(int pagina) {
+        Pageable pageable = PageRequest.of(pagina, 10);
+        return registrosRepository.findAll(pageable);
+    }
+    public Page<Registros> buscarRegistrosPorCliente(String buscar, int pagina) {
+        Pageable pageable = PageRequest.of(pagina, 10);
+        return registrosRepository.findByClienteNameContainingIgnoreCase(buscar, pageable);
     }
 
-    public List<Registros> buscarRegistrosPorCliente(String buscar) {
-        return registrosRepository.findByClienteNameContainingIgnoreCase(buscar);
-    }
     public void guardarRegistro(Cliente cliente, String tipo) {
         Registros registro = new Registros();
         registro.setCliente(cliente);
@@ -143,8 +103,22 @@ public class ClienteService {
         registro.setTipo(tipo);
         registrosRepository.save(registro);
     }
+    public boolean existeUsername(String username, int idActual) {
+        Cliente existente = clienteRepository.findByUsername(username);
+        return existente != null && existente.getClientId() != idActual;
+    }
+
     public Cliente findByUsername(String username) {
         return clienteRepository.findByUsername(username);
+    }
+    public List<Cliente> verTodosClientes() {
+        return clienteRepository.findAll();
+    }
+    public Page<Cliente> buscarClientes(String buscar, int pagina) {
+        Pageable pageable = PageRequest.of(pagina, 5);
+        return clienteRepository
+                .findByNameContainingIgnoreCaseOrSurnameContainingIgnoreCaseOrUsernameContainingIgnoreCase(
+                        buscar, buscar, buscar, pageable);
     }
 }
 

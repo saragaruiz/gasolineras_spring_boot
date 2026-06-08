@@ -9,7 +9,9 @@
     <nav>
         <ul>
             <li class ="sesion"><a href="/login">Cerrar Sesión</a></li>
-            <li class ="cambiar"><a href="/clientes/cambiar-password">Cambiar Contraseña</a></li>
+            <li class ="cambiar">
+                <a th:href="@{/clientes/cambiar-password(origen='perfil', clienteId=${cliente.clientId})}"> Cambiar Contraseña</a>
+            </li>
             <li class="perfil"><a th:href="@{/clientes/editar-perfil/{id}(id=${cliente.clientId})}">Editar Perfil</a></li>
         </ul>
     </nav>
@@ -28,6 +30,7 @@
 
         <form th:action="@{/clientes/guardar}" method="post">
             <input type="hidden" name="id" th:value="${cliente.clientId}">
+            <input type="hidden" name="origen" value="perfil"/>
 
         <p>Nombre: <span th:if="${editingId != cliente.clientId}" th:text="${cliente.name}"></span></p>
         <input th:if="${editingId == cliente.clientId}"

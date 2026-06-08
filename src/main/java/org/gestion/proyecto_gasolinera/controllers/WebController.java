@@ -1,8 +1,7 @@
 package org.gestion.proyecto_gasolinera.controllers;
 
 import org.gestion.proyecto_gasolinera.Gasolinera;
-import org.gestion.proyecto_gasolinera.repositories.ClienteRepository;
-import org.gestion.proyecto_gasolinera.repositories.RegistrosRepository;
+import org.gestion.proyecto_gasolinera.Registros;
 import org.gestion.proyecto_gasolinera.service.GasolineraService;
 import org.springframework.ui.Model;
 import org.gestion.proyecto_gasolinera.Cliente;
@@ -12,19 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
+
 
 @Controller
 public class WebController {
     private final ClienteService clienteService;
-    private final ClienteRepository clienteRepository;
     private final GasolineraService gasolineraService;
-    private final RegistrosRepository registrosRepository;
 
-    public WebController(ClienteService clienteService,  ClienteRepository clienteRepository, GasolineraService gasolineraService, RegistrosRepository registrosRepository) {
+    public WebController(ClienteService clienteService,  GasolineraService gasolineraService) {
         this.clienteService = clienteService;
-        this.clienteRepository = clienteRepository;
         this.gasolineraService = gasolineraService;
-        this.registrosRepository = registrosRepository;
     }
 
     @GetMapping("/login")
@@ -34,8 +31,7 @@ public class WebController {
 
     @PostMapping("/clientes/login-web")
     public String loginWeb(@RequestParam String username,
-                           @RequestParam String pass,
-                           Model model) {
+                           @RequestParam String pass) {
 
         Cliente cliente = clienteService.login(username, pass);
         if(cliente != null){
@@ -45,8 +41,10 @@ public class WebController {
                 return "redirect:/clientes/perfil/" + cliente.getClientId();
             }
         }
-            return "login";
+        return "redirect:/login?error=true";
+
     }
+
     @GetMapping("/clientes/perfil/{id}")
     public String verPerfil(@PathVariable int id, Model model) {
         Cliente cliente = clienteService.findById(id);
@@ -56,12 +54,20 @@ public class WebController {
     }
 
     @GetMapping("/clientes/web")
-    public String listar(@RequestParam(required = false) Boolean soloActivos,@RequestParam(required = false) Long editingId, Model model) {
-        if (Boolean.TRUE.equals(soloActivos)) {
-            model.addAttribute("clientes", clienteService.verClientesActivos());
+    public String listar(@RequestParam(required = false) Boolean soloActivos,@RequestParam(required = false) Long editingId, @RequestParam(defaultValue = "0") int pagina, @RequestParam(required = false) String buscar, Model model) {
+        Page<Cliente> paginaClientes;
+
+        if (buscar != null && !buscar.isBlank()) {
+            paginaClientes = clienteService.buscarClientes(buscar, pagina);
+        } else if (Boolean.TRUE.equals(soloActivos)) {
+            paginaClientes = clienteService.verClientesActivos(pagina);
         } else {
-            model.addAttribute("clientes", clienteService.verClientes());
+            paginaClientes = clienteService.verClientes(pagina);
         }
+        model.addAttribute("clientes", paginaClientes.getContent());
+        model.addAttribute("totalPaginas", paginaClientes.getTotalPages());
+        model.addAttribute("paginaActual", pagina);
+        model.addAttribute("buscar", buscar);
         model.addAttribute("gasolineras", gasolineraService.verGasolineras());
         model.addAttribute("editingId", editingId);
         model.addAttribute("soloActivos", soloActivos);
@@ -90,7 +96,6 @@ public class WebController {
     }
     @GetMapping("/clientes/eliminar/{id}")
     public String eliminarCliente(@PathVariable int id){
-        Cliente cliente = clienteService.findById(id);
         clienteService.guardarRegistro(clienteService.findById(id), "Cliente eliminado");
         clienteService.borrarCliente(id);
         return "redirect:/clientes/web";
@@ -110,7 +115,10 @@ public class WebController {
 
     @GetMapping("/clientes/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
-        model.addAttribute("clientes", clienteService.verClientes());
+        Page<Cliente> paginaClientes = clienteService.verClientes(0);
+        model.addAttribute("clientes", paginaClientes.getContent());
+        model.addAttribute("totalPaginas", paginaClientes.getTotalPages());
+        model.addAttribute("paginaActual", 0);
         model.addAttribute("editingId", id);
         return "clientes";
     }
@@ -123,7 +131,7 @@ public class WebController {
     }
 
     @PostMapping("/clientes/guardar")
-    public String guardar(@RequestParam int id, @RequestParam String name,  @RequestParam String surname,  @RequestParam String username, @RequestParam String nif, @RequestParam String active, @RequestParam(required = false)Integer gasStationId, Model model) {
+    public String guardar(@RequestParam int id, @RequestParam String name,  @RequestParam String surname,  @RequestParam String username, @RequestParam String nif, @RequestParam String active, @RequestParam(required = false)Integer gasStationId,  @RequestParam(required = false) String origen) {
         Cliente cliente = clienteService.findById(id);
         cliente.setName(name);
         cliente.setSurname(surname);
@@ -138,7 +146,11 @@ public class WebController {
         }
         clienteService.actualizarCliente(cliente);
         clienteService.guardarRegistro(cliente, "Perfil editado");
-        return "redirect:/clientes/perfil/" + id;
+        if("admin".equals(origen)){
+            return "redirect:/clientes/web";
+        }else {
+            return "redirect:/clientes/perfil/" + id;
+        }
     }
 
     @PostMapping("/clientes/asignar-favorita")
@@ -154,18 +166,25 @@ public class WebController {
         return "redirect:/clientes/web";
     }
     @GetMapping("/clientes/cambiar-password")
-    public String cambiarPassword(){
+    public String cambiarPassword(@RequestParam(required = false) String origen,
+                                  @RequestParam(required = false) Integer clienteId,
+                                  Model model) {
+        model.addAttribute("origen", origen);
+        model.addAttribute("clienteId", clienteId);
         return "CambiarContrasenia";
     }
     @PostMapping("/clientes/cambiar-password")
-    public String cambiarPassword(@RequestParam String username,
-                                  @RequestParam String nuevaPass) {
+    public String cambiarPassword(@RequestParam String username, @RequestParam String nuevaPass,  @RequestParam(required = false) String origen,  @RequestParam(required = false) Integer clienteId) {
 
         clienteService.cambiarContraseña(username, nuevaPass);
         Cliente cliente= clienteService.findByUsername(username);
         clienteService.guardarRegistro(cliente, "Contraseña cambiada");
+        if ("perfil".equals(origen) && clienteId != null) {
+            return "redirect:/clientes/perfil/" + clienteId;
+        }
         return "redirect:/clientes/web";
     }
+
     @GetMapping("/clientes/baja/{id}")
     public String darBaja(@PathVariable int id) {
         Cliente cliente = clienteService.findById(id);
@@ -196,12 +215,17 @@ public class WebController {
         return "crearCuenta";
     }
     @GetMapping({"/clientes/registros", "/clientes/registros/"})
-    public String verRegistros(@RequestParam(required = false) String buscar, Model model) {
+    public String verRegistros(@RequestParam(required = false) String buscar, @RequestParam(defaultValue = "0") int pagina, Model model) {
+        Page<Registros> paginaRegistros;
+
         if (buscar != null && !buscar.isBlank()) {
-            model.addAttribute("registros", clienteService.buscarRegistrosPorCliente(buscar));
+            paginaRegistros = clienteService.buscarRegistrosPorCliente(buscar, pagina);
         } else {
-            model.addAttribute("registros", clienteService.verTodosRegistros());
+            paginaRegistros = clienteService.verTodosRegistros(pagina);
         }
+        model.addAttribute("registros", paginaRegistros.getContent());
+        model.addAttribute("totalPaginas", paginaRegistros.getTotalPages());
+        model.addAttribute("paginaActual", pagina);
         model.addAttribute("buscar", buscar);
         return "registros";
     }

@@ -17,6 +17,9 @@
     <input type="text" name="username"/>
     <label>Contraseña: </label>
     <input type="password" name="pass"/>
+    <p th:if="${param.error}" class="error">
+        Usuario o contraseña incorrectos
+    </p>
     <button type="submit">Iniciar Sesión</button>
     <button type="button" onclick="window.location.href='/clientes/crear-cuenta'">Crear Cuenta</button>
 </form>
